@@ -18,9 +18,9 @@ exports.register = async (req,res) => {
 
 //login
 exports.login = async (req,res) =>{
-    const {username ,password} = req.body;
+    const {user_name ,password} = req.body;
     try{
-    const user = await User.findOne ({username});
+    const user = await User.findOne ({user_name});
     if(!user) return res.status(400).send("User not found");
     const isMatch = await bcrypt.compare(password, user.password);
     if(!isMatch) return res.status(400).send("Invalid credentials");
@@ -49,7 +49,7 @@ exports.refresh = async (req,res) =>{
             const accessToken = jwt.sign(
                 {userId : user.userId},
                 process.env.ACCESS_TOKEN_SECRET,
-                {exouresIn: "15m"}
+                {expiresIn: '15m'}
             );
             res.json ({accessToken}); 
     });
