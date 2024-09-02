@@ -8,10 +8,10 @@ dotenv.config();
 
 //REGISTER 
 exports.register = async (req, res) => {
-    const { user_name, password } = req.body;
+    const { user_name, password,name,role } = req.body;
     try {
         const hashedPasswor = await bcrypt.hash(password, 10);
-        const user = new User({ user_name, password: hashedPasswor });
+        const user = new User({ user_name, password: hashedPasswor,name,role });
         await user.save();
         res.status(201).send("User registered");
     } catch (err) {
@@ -38,7 +38,7 @@ exports.login = async (req, res) => {
             { userId: user._id },
             process.env.REFRESH_TOKEN_SECRET
         );
-        res.json({ accessToken, refreshToken });
+        res.json({ accessToken, refreshToken ,user});
 
     } catch (err) {
         res.status(500).send(err.message);
